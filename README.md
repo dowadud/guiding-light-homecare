@@ -94,8 +94,9 @@ All text content can be edited directly in `index.html`:
 ### Contact Information
 Update these in `index.html`:
 - Location: Anderson, SC 29621
-- Phone: (864) 555-CARE
-- Email: info@guidinglighthomecare.com
+- Phone: (864) 438-4626
+- Email: info@guidinglighthcllc.com
+- Website: www.guidinglighthcllc.com
 
 ## Libraries Used
 
@@ -165,8 +166,9 @@ Consider adding:
 ## Contact
 
 For questions or support regarding this website, please contact:
-- **Email**: info@guidinglighthomecare.com
-- **Phone**: (864) 555-CARE
+- **Email**: info@guidinglighthcllc.com
+- **Phone**: (864) 438-4626
+- **Website**: www.guidinglighthcllc.com
 - **Location**: Anderson, SC 29621
 
 ---
