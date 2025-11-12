@@ -1,36 +1,36 @@
+// ===================================
+// GUIDING LIGHT HOME CARE - JAVASCRIPT
+// ===================================
+
 // Initialize AOS (Animate On Scroll)
 AOS.init({
-    duration: 1200,
-    easing: 'ease-in-out-cubic',
+    duration: 1000,
+    easing: 'ease-in-out',
     once: true,
-    offset: 120,
-    delay: 50,
-    anchorPlacement: 'top-bottom'
+    offset: 100
 });
 
-// Navbar scroll effect
-const navbar = document.getElementById('navbar');
-let lastScroll = 0;
+// ===================================
+// NAVBAR FUNCTIONALITY
+// ===================================
 
+const navbar = document.getElementById('navbar');
+const hamburger = document.getElementById('hamburger');
+const navMenu = document.getElementById('nav-menu');
+
+// Navbar scroll effect
 window.addEventListener('scroll', () => {
-    const currentScroll = window.pageYOffset;
-    
-    if (currentScroll > 50) {
+    if (window.scrollY > 50) {
         navbar.classList.add('scrolled');
     } else {
         navbar.classList.remove('scrolled');
     }
-    
-    lastScroll = currentScroll;
 });
 
 // Mobile menu toggle
-const hamburger = document.getElementById('hamburger');
-const navMenu = document.getElementById('nav-menu');
-
 hamburger.addEventListener('click', () => {
-    navMenu.classList.toggle('active');
     hamburger.classList.toggle('active');
+    navMenu.classList.toggle('active');
 });
 
 // Close mobile menu when clicking on a link
@@ -42,13 +42,16 @@ navLinks.forEach(link => {
     });
 });
 
-// Smooth scroll for navigation links
+// ===================================
+// SMOOTH SCROLLING
+// ===================================
+
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         e.preventDefault();
         const target = document.querySelector(this.getAttribute('href'));
         if (target) {
-            const offsetTop = target.offsetTop - 80;
+            const offsetTop = target.offsetTop - 70;
             window.scrollTo({
                 top: offsetTop,
                 behavior: 'smooth'
@@ -57,15 +60,18 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// Animated counter for hero stats
+// ===================================
+// HERO STATS COUNTER ANIMATION
+// ===================================
+
 function animateCounter(element) {
     const target = parseInt(element.getAttribute('data-target'));
     const duration = 2000;
-    const step = target / (duration / 16);
+    const increment = target / (duration / 16);
     let current = 0;
 
     const updateCounter = () => {
-        current += step;
+        current += increment;
         if (current < target) {
             element.textContent = Math.floor(current);
             requestAnimationFrame(updateCounter);
@@ -77,12 +83,7 @@ function animateCounter(element) {
     updateCounter();
 }
 
-// Trigger counter animation when hero section is visible
-const observerOptions = {
-    threshold: 0.5,
-    rootMargin: '0px'
-};
-
+// Observe hero section to trigger counter animation
 const heroObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -95,14 +96,17 @@ const heroObserver = new IntersectionObserver((entries) => {
             heroObserver.unobserve(entry.target);
         }
     });
-}, observerOptions);
+}, { threshold: 0.5 });
 
 const heroSection = document.querySelector('.hero');
 if (heroSection) {
     heroObserver.observe(heroSection);
 }
 
-// Parallax effect for hero image
+// ===================================
+// PARALLAX EFFECT FOR HERO
+// ===================================
+
 window.addEventListener('scroll', () => {
     const scrolled = window.pageYOffset;
     const heroImage = document.querySelector('.hero-image');
@@ -111,28 +115,40 @@ window.addEventListener('scroll', () => {
     }
 });
 
-// Form submission handler
+// ===================================
+// CONTACT FORM SUBMISSION
+// ===================================
+
 const contactForm = document.getElementById('contact-form');
 if (contactForm) {
-    contactForm.addEventListener('submit', (e) => {
+    contactForm.addEventListener('submit', function(e) {
         e.preventDefault();
         
-        // Get form values
-        const formData = new FormData(contactForm);
-        const data = Object.fromEntries(formData);
+        // Get form data
+        const formData = new FormData(this);
+        const data = {
+            name: formData.get('name'),
+            email: formData.get('email'),
+            phone: formData.get('phone'),
+            service: formData.get('service'),
+            message: formData.get('message')
+        };
         
-        // Here you would typically send the data to a server
+        // Log form data (in production, send to server)
         console.log('Form submitted:', data);
         
-        // Show success message (you can customize this)
-        alert('Thank you for reaching out! We will contact you soon.');
+        // Show success message
+        alert('Thank you for contacting us! We will get back to you soon.');
         
         // Reset form
-        contactForm.reset();
+        this.reset();
     });
 }
 
-// Add hover effect to service cards
+// ===================================
+// HOVER EFFECTS FOR SERVICE CARDS
+// ===================================
+
 const serviceCards = document.querySelectorAll('.service-card');
 serviceCards.forEach(card => {
     card.addEventListener('mouseenter', function() {
@@ -144,11 +160,14 @@ serviceCards.forEach(card => {
     });
 });
 
-// Add hover effect to team cards
+// ===================================
+// HOVER EFFECTS FOR TEAM CARDS
+// ===================================
+
 const teamCards = document.querySelectorAll('.team-card');
 teamCards.forEach(card => {
     card.addEventListener('mouseenter', function() {
-        this.style.transform = 'translateY(-15px) rotate(2deg)';
+        this.style.transform = 'translateY(-15px) rotate(1deg)';
     });
     
     card.addEventListener('mouseleave', function() {
@@ -156,185 +175,10 @@ teamCards.forEach(card => {
     });
 });
 
-// Testimonial card flip animation on scroll
-const testimonialObserver = new IntersectionObserver((entries) => {
-    entries.forEach((entry, index) => {
-        if (entry.isIntersecting) {
-            setTimeout(() => {
-                entry.target.style.animation = 'flipIn 0.6s ease-out forwards';
-            }, index * 100);
-            testimonialObserver.unobserve(entry.target);
-        }
-    });
-}, { threshold: 0.3 });
+// ===================================
+// SCROLL PROGRESS INDICATOR
+// ===================================
 
-const testimonialCards = document.querySelectorAll('.testimonial-card');
-testimonialCards.forEach(card => {
-    testimonialObserver.observe(card);
-});
-
-// Add CSS for flip animation
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes flipIn {
-        from {
-            transform: perspective(400px) rotateX(-90deg);
-            opacity: 0;
-        }
-        to {
-            transform: perspective(400px) rotateX(0);
-            opacity: 1;
-        }
-    }
-`;
-document.head.appendChild(style);
-
-// Image loading handler
-const images = document.querySelectorAll('img');
-images.forEach(img => {
-    // Ensure images are visible
-    img.style.opacity = '1';
-    
-    // Add load event listener
-    img.addEventListener('load', function() {
-        this.style.opacity = '1';
-    });
-    
-    // Fallback for already loaded images
-    if (img.complete) {
-        img.style.opacity = '1';
-    }
-});
-
-// Add floating animation to buttons
-const buttons = document.querySelectorAll('.btn');
-buttons.forEach(button => {
-    button.addEventListener('mouseenter', function() {
-        this.style.animation = 'float 2s ease-in-out infinite';
-    });
-    
-    button.addEventListener('mouseleave', function() {
-        this.style.animation = 'none';
-    });
-});
-
-// Add float animation keyframes
-const floatStyle = document.createElement('style');
-floatStyle.textContent = `
-    @keyframes float {
-        0%, 100% {
-            transform: translateY(0);
-        }
-        50% {
-            transform: translateY(-5px);
-        }
-    }
-`;
-document.head.appendChild(floatStyle);
-
-// Section reveal animation
-const revealObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('revealed');
-            revealObserver.unobserve(entry.target);
-        }
-    });
-}, { threshold: 0.1 });
-
-const sections = document.querySelectorAll('section:not(.hero)');
-sections.forEach(section => {
-    section.style.opacity = '0';
-    section.style.transform = 'translateY(30px)';
-    section.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-    revealObserver.observe(section);
-});
-
-// Add revealed class style
-const revealStyle = document.createElement('style');
-revealStyle.textContent = `
-    .revealed {
-        opacity: 1 !important;
-        transform: translateY(0) !important;
-    }
-`;
-document.head.appendChild(revealStyle);
-
-// Cursor trail effect (optional - modern touch)
-let mouseX = 0;
-let mouseY = 0;
-let cursorX = 0;
-let cursorY = 0;
-
-document.addEventListener('mousemove', (e) => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-});
-
-// Create cursor elements
-const cursor = document.createElement('div');
-cursor.style.cssText = `
-    position: fixed;
-    width: 10px;
-    height: 10px;
-    background: #f39c12;
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 9999;
-    mix-blend-mode: difference;
-    transition: transform 0.2s ease;
-`;
-document.body.appendChild(cursor);
-
-const cursorFollower = document.createElement('div');
-cursorFollower.style.cssText = `
-    position: fixed;
-    width: 40px;
-    height: 40px;
-    border: 2px solid rgba(243, 156, 18, 0.5);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 9998;
-    transition: all 0.15s ease;
-`;
-document.body.appendChild(cursorFollower);
-
-function updateCursor() {
-    cursorX += (mouseX - cursorX) * 0.3;
-    cursorY += (mouseY - cursorY) * 0.3;
-    
-    cursor.style.left = mouseX + 'px';
-    cursor.style.top = mouseY + 'px';
-    
-    cursorFollower.style.left = (cursorX - 20) + 'px';
-    cursorFollower.style.top = (cursorY - 20) + 'px';
-    
-    requestAnimationFrame(updateCursor);
-}
-
-updateCursor();
-
-// Add hover effects for interactive elements
-const interactiveElements = document.querySelectorAll('a, button, input, textarea, select');
-interactiveElements.forEach(element => {
-    element.addEventListener('mouseenter', () => {
-        cursor.style.transform = 'scale(1.5)';
-        cursorFollower.style.transform = 'scale(1.5)';
-    });
-    
-    element.addEventListener('mouseleave', () => {
-        cursor.style.transform = 'scale(1)';
-        cursorFollower.style.transform = 'scale(1)';
-    });
-});
-
-// Hide custom cursor on mobile
-if (window.matchMedia('(max-width: 968px)').matches) {
-    cursor.style.display = 'none';
-    cursorFollower.style.display = 'none';
-}
-
-// Add scroll progress indicator
 const scrollProgress = document.createElement('div');
 scrollProgress.style.cssText = `
     position: fixed;
@@ -343,7 +187,7 @@ scrollProgress.style.cssText = `
     width: 0%;
     height: 4px;
     background: linear-gradient(90deg, #2c5aa0, #f39c12);
-    z-index: 10000;
+    z-index: 10001;
     transition: width 0.1s ease;
 `;
 document.body.appendChild(scrollProgress);
@@ -354,70 +198,126 @@ window.addEventListener('scroll', () => {
     scrollProgress.style.width = scrolled + '%';
 });
 
-// Add entrance animation for page load
+// ===================================
+// CUSTOM CURSOR (Desktop Only)
+// ===================================
+
+if (window.innerWidth > 968) {
+    let mouseX = 0;
+    let mouseY = 0;
+    let cursorX = 0;
+    let cursorY = 0;
+
+    document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+    });
+
+    // Create cursor dot
+    const cursor = document.createElement('div');
+    cursor.style.cssText = `
+        position: fixed;
+        width: 10px;
+        height: 10px;
+        background: #f39c12;
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 9999;
+        mix-blend-mode: difference;
+        transition: transform 0.2s ease;
+    `;
+    document.body.appendChild(cursor);
+
+    // Create cursor follower
+    const cursorFollower = document.createElement('div');
+    cursorFollower.style.cssText = `
+        position: fixed;
+        width: 40px;
+        height: 40px;
+        border: 2px solid rgba(243, 156, 18, 0.5);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 9998;
+        transition: all 0.15s ease;
+    `;
+    document.body.appendChild(cursorFollower);
+
+    function updateCursor() {
+        cursorX += (mouseX - cursorX) * 0.3;
+        cursorY += (mouseY - cursorY) * 0.3;
+        
+        cursor.style.left = mouseX + 'px';
+        cursor.style.top = mouseY + 'px';
+        
+        cursorFollower.style.left = (cursorX - 20) + 'px';
+        cursorFollower.style.top = (cursorY - 20) + 'px';
+        
+        requestAnimationFrame(updateCursor);
+    }
+
+    updateCursor();
+
+    // Add hover effects for interactive elements
+    const interactiveElements = document.querySelectorAll('a, button, input, textarea, select');
+    interactiveElements.forEach(element => {
+        element.addEventListener('mouseenter', () => {
+            cursor.style.transform = 'scale(1.5)';
+            cursorFollower.style.transform = 'scale(1.5)';
+        });
+        
+        element.addEventListener('mouseleave', () => {
+            cursor.style.transform = 'scale(1)';
+            cursorFollower.style.transform = 'scale(1)';
+        });
+    });
+}
+
+// ===================================
+// IMAGE LOADING OPTIMIZATION
+// ===================================
+
+const images = document.querySelectorAll('img');
+const imageObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            const img = entry.target;
+            img.style.opacity = '1';
+            imageObserver.unobserve(img);
+        }
+    });
+}, { rootMargin: '50px' });
+
+images.forEach(img => {
+    img.style.opacity = '1'; // Ensure immediate visibility
+    if (img.complete) {
+        img.style.opacity = '1';
+    }
+    imageObserver.observe(img);
+});
+
+// ===================================
+// PAGE LOAD ANIMATION
+// ===================================
+
 window.addEventListener('load', () => {
     document.body.style.opacity = '1';
 });
 
 document.body.style.opacity = '0';
-document.body.style.transition = 'opacity 0.5s ease';
+document.body.style.transition = 'opacity 0.3s ease';
 
-// Enhanced Scroll Animations
-function initScrollAnimations() {
-    const animatedElements = document.querySelectorAll('.fade-in-up, .fade-in-left, .fade-in-right, .scale-in, .rotate-in');
-    
-    const scrollObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-                // Optionally unobserve after animation
-                scrollObserver.unobserve(entry.target);
-            }
-        });
-    }, {
-        threshold: 0.15,
-        rootMargin: '0px 0px -50px 0px'
-    });
-    
-    animatedElements.forEach(el => {
-        scrollObserver.observe(el);
-    });
-}
+// ===================================
+// AOS REFRESH ON RESIZE
+// ===================================
 
-// Call on load
-initScrollAnimations();
-
-// Refresh AOS on certain scroll events for better performance
-let ticking = false;
-window.addEventListener('scroll', () => {
-    if (!ticking) {
-        window.requestAnimationFrame(() => {
-            AOS.refresh();
-            ticking = false;
-        });
-        ticking = true;
-    }
+window.addEventListener('resize', () => {
+    AOS.refresh();
 });
 
-// Add smooth reveal for service cards
-const serviceCards = document.querySelectorAll('.service-card');
-serviceCards.forEach((card, index) => {
-    card.style.animationDelay = `${index * 0.1}s`;
-});
+// ===================================
+// CONSOLE MESSAGE
+// ===================================
 
-// Add parallax effect to section backgrounds
-window.addEventListener('scroll', () => {
-    const scrolled = window.pageYOffset;
-    const parallaxElements = document.querySelectorAll('.about-image, .team-card, .testimonial-card');
-    
-    parallaxElements.forEach((element, index) => {
-        const speed = 0.05 * (index + 1);
-        const yPos = -(scrolled * speed);
-        if (element.getBoundingClientRect().top < window.innerHeight && element.getBoundingClientRect().bottom > 0) {
-            element.style.transform = `translateY(${yPos}px)`;
-        }
-    });
-});
-
-console.log('Guiding Light Home Care - Website Loaded Successfully with Enhanced Animations');
-
+console.log('%c✦ Guiding Light Home Care LLC', 'color: #2c5aa0; font-size: 20px; font-weight: bold;');
+console.log('%cWebsite loaded successfully!', 'color: #f39c12; font-size: 14px;');
+console.log('%cContact: (864) 438-4626 | info@guidinglighthcllc.com', 'color: #27ae60; font-size: 12px;');
