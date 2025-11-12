@@ -1,9 +1,11 @@
 // Initialize AOS (Animate On Scroll)
 AOS.init({
-    duration: 1000,
-    easing: 'ease-in-out',
+    duration: 1200,
+    easing: 'ease-in-out-cubic',
     once: true,
-    offset: 100
+    offset: 120,
+    delay: 50,
+    anchorPlacement: 'top-bottom'
 });
 
 // Navbar scroll effect
@@ -359,5 +361,62 @@ window.addEventListener('load', () => {
 document.body.style.opacity = '0';
 document.body.style.transition = 'opacity 0.5s ease';
 
-console.log('Guiding Light Home Care - Website Loaded Successfully');
+// Enhanced Scroll Animations
+function initScrollAnimations() {
+    const animatedElements = document.querySelectorAll('.fade-in-up, .fade-in-left, .fade-in-right, .scale-in, .rotate-in');
+    
+    const scrollObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                // Optionally unobserve after animation
+                scrollObserver.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.15,
+        rootMargin: '0px 0px -50px 0px'
+    });
+    
+    animatedElements.forEach(el => {
+        scrollObserver.observe(el);
+    });
+}
+
+// Call on load
+initScrollAnimations();
+
+// Refresh AOS on certain scroll events for better performance
+let ticking = false;
+window.addEventListener('scroll', () => {
+    if (!ticking) {
+        window.requestAnimationFrame(() => {
+            AOS.refresh();
+            ticking = false;
+        });
+        ticking = true;
+    }
+});
+
+// Add smooth reveal for service cards
+const serviceCards = document.querySelectorAll('.service-card');
+serviceCards.forEach((card, index) => {
+    card.style.animationDelay = `${index * 0.1}s`;
+});
+
+// Add parallax effect to section backgrounds
+window.addEventListener('scroll', () => {
+    const scrolled = window.pageYOffset;
+    const parallaxElements = document.querySelectorAll('.about-image, .team-card, .testimonial-card');
+    
+    parallaxElements.forEach((element, index) => {
+        const speed = 0.05 * (index + 1);
+        const yPos = -(scrolled * speed);
+        if (element.getBoundingClientRect().top < window.innerHeight && element.getBoundingClientRect().bottom > 0) {
+            element.style.transform = `translateY(${yPos}px)`;
+        }
+    });
+});
+
+console.log('Guiding Light Home Care - Website Loaded Successfully with Enhanced Animations');
 
