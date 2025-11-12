@@ -189,20 +189,21 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-// Lazy loading for images
+// Image loading handler
 const images = document.querySelectorAll('img');
-const imageObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            const img = entry.target;
-            img.src = img.src; // Trigger reload for animation
-            imageObserver.unobserve(img);
-        }
-    });
-}, { rootMargin: '50px' });
-
 images.forEach(img => {
-    imageObserver.observe(img);
+    // Ensure images are visible
+    img.style.opacity = '1';
+    
+    // Add load event listener
+    img.addEventListener('load', function() {
+        this.style.opacity = '1';
+    });
+    
+    // Fallback for already loaded images
+    if (img.complete) {
+        img.style.opacity = '1';
+    }
 });
 
 // Add floating animation to buttons

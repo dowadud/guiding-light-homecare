@@ -959,11 +959,19 @@ section {
 
 /* Loading Animation for Images */
 img {
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+img.lazy-load {
     opacity: 0;
     animation: fadeIn 0.5s forwards;
 }
 
 @keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
     to {
         opacity: 1;
     }
